@@ -1,0 +1,5 @@
+<select name="range" size="1">
+							<option value="tieba"></option>
+							<option value="user"></option>
+							<option value="general"></option>
+						</select>
