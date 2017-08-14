@@ -331,6 +331,24 @@ input:focus {
 	top: 100%;
 	opacity: 1;
 }
+select {
+  border: none;
+  
+  font-size: 17px;
+  line-height: 35px;
+  padding: 10px 0 0 25px;
+
+  appearance:none;
+  -moz-appearance:none;
+  -webkit-appearance:none;
+
+  background: url(../images/triangle.png) no-repeat scroll right center transparent;
+  background-position: 85% center;
+  background-repeat: no-repeat;
+  padding-right: 34px;
+}
+
+select::-ms-expand { display: none; }
 .grid_1{
 	width:95%;
 	margin:0 auto;
