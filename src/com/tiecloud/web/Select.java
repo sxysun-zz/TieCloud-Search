@@ -1,8 +1,9 @@
 package com.tiecloud.web;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
+import com.tiecloud.model.Expert;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,11 +13,16 @@ public class Select extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
-		out.println("TieCloud Search Result<br>");
+		
 		String c = request.getParameter("search_text");
-		out.println("<br>Got Input " + c);
+		String r = request.getParameter("range");
+		
+		Expert e = new Expert();
+		String s = e.getCloud(c, r);
+		
+		request.setAttribute("location", s);
+		RequestDispatcher view = request.getRequestDispatcher("result.jsp");
+		view.forward(request, response);
 	}
 
 }
