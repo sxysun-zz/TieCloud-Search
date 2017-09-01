@@ -36,42 +36,26 @@ public class Crawler extends Thread{
 	public void run(){
 		if(searchText != null){
 			switch(searchMode){
-			case GENERIC_SEARCH_MODE:
-				crawledString =  genericSearch(searchText);
-			case FETCH_USR_INFO_MODE:
-				FetchData.getInstance().setInfoName(getTiebaUserInfoName(searchText).split("\n"));
-				String[] infoLevelString = getTiebaUserInfoLevel(searchText).split("\n");
-				int temp = infoLevelString.length;
-				infoLevel = new int[temp];
-				for(int i = 0; i < temp; i++){
-					infoLevel[i] = (Integer.parseInt(infoLevelString[i]) + (temp - i));
-				}
-			case FETCH_TIEBA_INFO_MODE:
-				
-			default:
-				
+				case GENERIC_SEARCH_MODE:
+					crawledString =  genericSearch(searchText);
+				case FETCH_USR_INFO_MODE:
+					FetchData.getInstance().setInfoName(getTiebaUserInfoName(searchText).split("\n"));
+					String[] infoLevelString = getTiebaUserInfoLevel(searchText).split("\n");
+					int temp = infoLevelString.length;
+					FetchData.getInstance().setInfoLevel(new int[temp]);
+					for(int i = 0; i < temp; i++){
+						FetchData.getInstance().getinfoLevel()[i] = (Integer.parseInt(infoLevelString[i]) + (temp - i));
+					}
+				case FETCH_TIEBA_INFO_MODE:
+					implement
 			}
 		}else{
 			log.write("No input");
 		}
-			
-			
-			for(int i = 0; i < infoName.length; i++){
-				try{
-					System.out.println(i + "-" + infoName[i] + "-" + infoLevel[i]);
-					crawlTiebaTitle(0, infoLevel[i] * FetchData.tiebaOffset, infoName[i]);
-				}catch(Exception e){
-					
-				}
-			}
 	}
 	
 	public String genericSearch(String text){
 		return getPage("https://www.baidu.com/s?wd=" + text);
-	}
-	
-	public void fetchUsrInfo(){
-		
 	}
 	
 	public String getTiebaUserInfoName(String ID){

@@ -11,11 +11,17 @@ public class FetchData {
 	
 	public static final int DEFAULT_TIEBA_OFFSET = 50;
 	
-	public int tiebaOffset = DEFAULT_TIEBA_OFFSET;
+	public static final String GENERIC_SEARCH_MODE = "general";
+	
+	public static final String TIEBA_SEARCH_MODE = "tieba";
+	
+	public static final String USER_SEARCH_MODE = "user";
 	
 	public String[] infoName = null;
 	
 	public int[] infoLevel = null;
+	
+	public int tiebaOffset = DEFAULT_TIEBA_OFFSET;
 	
 	private static FetchData singleton = new FetchData();
 	
@@ -23,6 +29,31 @@ public class FetchData {
 		/*
 		 * Singleton class keep multiple crawler cooperate 
 		 */
+	}
+	
+	private void crawlInfo(String searchText, String searchMode){
+		
+		switch(searchMode){
+			case GENERIC_SEARCH_MODE:
+				Crawler genericCrawler = new Crawler();
+				genericCrawler.searchMode = Crawler.GENERIC_SEARCH_MODE;
+				genericCrawler.start();
+			case TIEBA_SEARCH_MODE:
+				Crawler tiebaCrawler = new Crawler();
+				tiebaCrawler.searchMode = Crawler.FETCH_TIEBA_INFO_MODE;
+				tiebaCrawler.start();
+			case USER_SEARCH_MODE:
+				
+		}
+		
+		for(int i = 0; i < infoName.length; i++){
+			try{
+				System.out.println(i + "-" + infoName[i] + "-" + infoLevel[i]);
+				crawlTiebaTitle(0, infoLevel[i] * tiebaOffset, infoName[i]);
+			}catch(Exception e){
+				
+			}
+		}
 	}
 	
 	public static FetchData getInstance(){
@@ -75,12 +106,6 @@ public class FetchData {
 		crawler6.start();
 		crawler7.start();
 	}
-*/
-	private void crawlInfo(String _ID){
-		Name = _ID;
-		Crawler crawler1 = new Crawler();
-		crawler1.start();
-	}
-	
+*/	
 	
 }
