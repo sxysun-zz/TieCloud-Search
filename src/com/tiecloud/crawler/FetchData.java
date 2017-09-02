@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import com.tiecloud.util.LogUtil;
+
 public class FetchData {
 	
 	public static final int DEFAULT_TIEBA_OFFSET = 50;
@@ -23,6 +25,8 @@ public class FetchData {
 	
 	public int tiebaOffset = DEFAULT_TIEBA_OFFSET;
 	
+	private LogUtil log = new LogUtil(LogUtil.WRITE_TO_CONSOLE_MODE);
+	
 	private static FetchData singleton = new FetchData();
 	
 	private FetchData(){
@@ -31,28 +35,53 @@ public class FetchData {
 		 */
 	}
 	
-	private void crawlInfo(String searchText, String searchMode){
+	private Crawler instantiateTiebaCrawler(String name, String searchText, int start, int end, boolean write){
+		Crawler tiebaCrawler = new Crawler(name);
+		tiebaCrawler.searchMode = Crawler.FETCH_TIEBA_INFO_MODE;
+		tiebaCrawler.searchText = searchText;
+		tiebaCrawler.setStartTiebaIndex(start);
+		tiebaCrawler.setEndingTiebaIndex(end);
+		tiebaCrawler.setWriteTiebaFile(write);
+		return tiebaCrawler;
+	}
+	
+	public void crawlInfo(String searchText, String searchMode){
 		
 		switch(searchMode){
 			case GENERIC_SEARCH_MODE:
-				Crawler genericCrawler = new Crawler();
+				Crawler genericCrawler = new Crawler("genericCrawler");
 				genericCrawler.searchMode = Crawler.GENERIC_SEARCH_MODE;
+				genericCrawler.searchText = searchText;
 				genericCrawler.start();
+//				genericCrawler.getCrawledString();
 			case TIEBA_SEARCH_MODE:
-				Crawler tiebaCrawler = new Crawler();
-				tiebaCrawler.searchMode = Crawler.FETCH_TIEBA_INFO_MODE;
-				tiebaCrawler.start();
+				instantiateTiebaCrawler("tiebaCrawler", searchText, 0, tiebaCrawler.getTiebaMaxPage(searchText), false);
+//				tiebaCrawler.getCrawledString();
 			case USER_SEARCH_MODE:
+				Crawler usrCrawler = new Crawler("usrCrawler");
+				usrCrawler.searchMode = Crawler.FETCH_USR_INFO_MODE;
+				usrCrawler.searchText = searchText;
+				usrCrawler.start();
 				
-		}
-		
-		for(int i = 0; i < infoName.length; i++){
-			try{
-				System.out.println(i + "-" + infoName[i] + "-" + infoLevel[i]);
-				crawlTiebaTitle(0, infoLevel[i] * tiebaOffset, infoName[i]);
-			}catch(Exception e){
+				Crawler[] tiebaMultiThreadCrawler = new Crawler[infoName.length];
+				for(int i = 0; i < infoName.length; i++){
+					tiebaMultiThreadCrawler[i] = new Crawler("TiebaMultiThreadCrawler" + i);
+				}
 				
-			}
+				for(int i = 0; i < infoName.length; i++){
+					try{
+						log.write(i + "-" + infoName[i] + "-" + infoLevel[i]);
+						tiebaMultiThreadCrawler[i].searchText = infoName[i];
+						tiebaMultiThreadCrawler[i].setStartTiebaIndex(0);
+						tiebaMultiThreadCrawler[i].setEndingTiebaIndex(infoLevel[i] * tiebaOffset);
+						tiebaMultiThreadCrawler[i].setWriteTiebaFile(true);
+						tiebaMultiThreadCrawler[i].start();
+					}catch(Exception e){
+						
+					}
+				}
+			default:
+//				implement
 		}
 	}
 	
@@ -83,29 +112,5 @@ public class FetchData {
 	public int[] getinfoLevel(){
 		return infoLevel;
 	}
-	
-/*
-	private void ASyncCrawlText(int _pages, String _name){
-//		_t.setText(catchText(_in.getText(), "<div id=\"middlew8\">", "<div id=\"bottomw8\">", "title=\"", "\" >"));
-		Name = _name;
-		CrawlerIns crawler1 = new CrawlerIns();
-		CrawlerIns crawler2 = new CrawlerIns();
-		CrawlerIns crawler3 = new CrawlerIns();
-		CrawlerIns crawler4 = new CrawlerIns();
-		CrawlerIns crawler5 = new CrawlerIns();
-		CrawlerIns crawler6= new CrawlerIns();
-		CrawlerIns crawler7 = new CrawlerIns();
-		
-		//add the number of pages to download
-		
-		crawler1.start();
-		crawler2.start();
-		crawler3.start();
-		crawler4.start();
-		crawler5.start();
-		crawler6.start();
-		crawler7.start();
-	}
-*/	
 	
 }

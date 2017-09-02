@@ -23,15 +23,32 @@ public class Crawler extends Thread{
 	
 	public static final String FETCHED_DATA_LOC = "res";
 	
+	public static final int DEFAULT_TIEBA_START_INDEX = 0;
+	
+	public static final int DEFAULT_TIEBA_ENDING_INDEX = 0;
+	
+	private int startTiebaIndex = DEFAULT_TIEBA_START_INDEX;
+	
+	private int endTiebaIndex = DEFAULT_TIEBA_ENDING_INDEX;
+	
 	public String searchText = null;
 	
-	private LogUtil log = new LogUtil(LogUtil.DEFAULT_MODE);
+	private LogUtil log = new LogUtil(LogUtil.WRITE_TO_CONSOLE_MODE);
 	
 	private PropertyUtil prop = new PropertyUtil();
 	
 	public int searchMode = GENERIC_SEARCH_MODE;
 	
-	public String crawledString = null;
+	private String crawledString = null;
+	
+	public String crawlerName = null;
+	
+	private boolean writeTiebaFile = false;
+	
+	public Crawler(String crawlerName){
+		this.crawlerName = crawlerName;
+		log.setPrefix(crawlerName);
+	}
 	
 	public void run(){
 		if(searchText != null){
@@ -46,12 +63,35 @@ public class Crawler extends Thread{
 					for(int i = 0; i < temp; i++){
 						FetchData.getInstance().getinfoLevel()[i] = (Integer.parseInt(infoLevelString[i]) + (temp - i));
 					}
+					crawledString = "User info searched, see array for detail";
 				case FETCH_TIEBA_INFO_MODE:
-					implement
+					crawledString = crawlTiebaTitle(this.startTiebaIndex, this.endTiebaIndex 
+							, searchText, writeTiebaFile);
 			}
 		}else{
 			log.write("No input");
+			crawledString = "searchText input is null";
 		}
+	}
+	
+	public void setWriteTiebaFile(boolean write){
+		this.writeTiebaFile = write;
+	}
+	
+	public void setStartTiebaIndex(int start){
+		this.startTiebaIndex = start;
+	}
+	
+	public void setEndingTiebaIndex(int end){
+		this.endTiebaIndex = end;
+	}
+	
+	public boolean getWriteTiebaFile(){
+		return this.writeTiebaFile;
+	}
+	
+	public String getCrawledString(){
+		return this.crawledString;
 	}
 	
 	public String genericSearch(String text){
@@ -70,25 +110,37 @@ public class Crawler extends Thread{
 				, "<span class=\"forum_level lv", "\"></span>");
 	}
 	
-	public void crawlTiebaTitle(int minPageNum, int maxPageNumEx, String tiebaName){
-		try {
-			File output = new File(prop.getCurrentLoc() 
-					+ prop.getPathSep()  + FETCHED_DATA_LOC + prop.getPathSep()
-					+ "titles_" + minPageNum + "-" + maxPageNumEx + "_" + tiebaName + ".txt");
-			FileWriter writer = new FileWriter(output, false);
-			int max = maxPageNumEx*50;
-			int min = minPageNum*50;
-			
+	public String crawlTiebaTitle(int minPageNum, int maxPageNumEx, String tiebaName, boolean writeToFile){
+		int max = maxPageNumEx*50;
+		int min = minPageNum*50;
+		if(writeToFile){
+			try {
+				File output = new File(prop.getCurrentLoc() 
+						+ prop.getPathSep()  + FETCHED_DATA_LOC + prop.getPathSep() + 
+						crawlerName + "_" + searchText + prop.getPathSep()
+						+ "titles_" + minPageNum + "-" + maxPageNumEx + "_" + tiebaName + ".txt");
+				FileWriter writer = new FileWriter(output, false);
+				for(int i = min; i < max; i += 50){
+					writer.write(
+							catchText("https://tieba.baidu.com/f?kw=" + tiebaName + "&ie=utf-8&pn=" + i, 
+									"threadlist_bright", 
+							"thread_list_bottom", "class=\"j_th_tit \">", "</a>"));
+				}
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				log.write(e.getMessage());
+			}
+			return null;
+		}else{
+			String output = "";
 			for(int i = min; i < max; i += 50){
-				writer.write(
+				output +=
 						catchText("https://tieba.baidu.com/f?kw=" + tiebaName + "&ie=utf-8&pn=" + i, 
 								"threadlist_bright", 
-						"thread_list_bottom", "class=\"j_th_tit \">", "</a>"));
+						"thread_list_bottom", "class=\"j_th_tit \">", "</a>");
 			}
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			log.write(e.getMessage());
+			return output;
 		}
 	}
 	
@@ -127,7 +179,7 @@ public class Crawler extends Thread{
 			String withHttp = "http://" + url.substring(8);
 			String pageHttp = getPage(withHttp);
 			if(pageHttp.indexOf(sTag) == -1){
-				log.write("This Tieba user has locked his private info");
+				log.write("Unable to fetch page info, check if input is valid");
 			 	log.write(withHttp + "-" + sTag);
 			}
 		}
@@ -138,6 +190,11 @@ public class Crawler extends Thread{
 			output += (page.substring(currentIndex + eleS.length(), page.indexOf(eleE, currentIndex)) + "\n");
 		}
 		return output;
+	}
+	
+	public int getTiebaMaxPage(String tiebaName){
+		return Integer.parseInt(catchText("https://tieba.baidu.com/f?kw=" + tiebaName + "&ie=utf-8&pn=0",
+				"next pagination-item", "last pagination-item", "&pn=", " class="));
 	}
 	
 }

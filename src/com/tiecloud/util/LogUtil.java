@@ -11,15 +11,23 @@ import java.io.OutputStreamWriter;
 
 public class LogUtil {
 	
-	public static final int DEFAULT_MODE = 0;
+	public static final int WRITE_TO_CONSOLE_MODE = 0;
+	public static final int WRITE_TO_FILE_MODE = 1;
+	public static final int MUTE_MODE = 2;
 	public static final String DEFAULT_FILE_LOCATION = "output.txt";
 	
 	//if 0 then console, if not then file
-	public int mode = DEFAULT_MODE;
+	public int mode = WRITE_TO_CONSOLE_MODE;
+	
 	public String fileLoc = DEFAULT_FILE_LOCATION;
+	public String prefix = null;
 	
 	public LogUtil(int mode){
 		this.mode = mode;
+	}
+	
+	public void setPrefix(String prefix){
+		this.prefix = prefix;
 	}
 	
 	public void setMode(int mode){
@@ -31,10 +39,14 @@ public class LogUtil {
 	}
 	
 	public void write(String input){
-		if(mode == 0)
-			System.out.println(input);
-		else 
-			write(input, fileLoc);
+		switch(mode){
+			case 0:
+				System.out.println(prefix + " --- " + input);
+			case 1:
+				write(prefix + " --- " + input, fileLoc);
+			case 2:
+				return;
+		}
 	}
 	
 	public void write(String input, String fileLocation){
