@@ -45,6 +45,10 @@ public class Crawler extends Thread{
 	
 	private boolean writeTiebaFile = false;
 	
+	public String pathLocation = prop.getCurrentLoc() 
+			+ prop.getPathSep()  + FETCHED_DATA_LOC + prop.getPathSep() + 
+			crawlerName + "_" + searchText + prop.getPathSep();
+	
 	public Crawler(String crawlerName){
 		this.crawlerName = crawlerName;
 		log.setPrefix(crawlerName);
@@ -72,6 +76,10 @@ public class Crawler extends Thread{
 			log.write("No input");
 			crawledString = "searchText input is null";
 		}
+	}
+	
+	public String getFilePath(){
+		return this.pathLocation;
 	}
 	
 	public void setWriteTiebaFile(boolean write){
@@ -115,9 +123,7 @@ public class Crawler extends Thread{
 		int min = minPageNum*50;
 		if(writeToFile){
 			try {
-				File output = new File(prop.getCurrentLoc() 
-						+ prop.getPathSep()  + FETCHED_DATA_LOC + prop.getPathSep() + 
-						crawlerName + "_" + searchText + prop.getPathSep()
+				File output = new File(pathLocation
 						+ "titles_" + minPageNum + "-" + maxPageNumEx + "_" + tiebaName + ".txt");
 				FileWriter writer = new FileWriter(output, false);
 				for(int i = min; i < max; i += 50){

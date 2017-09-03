@@ -1,12 +1,5 @@
 package com.tiecloud.crawler;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-
 import com.tiecloud.util.LogUtil;
 
 public class FetchData {
@@ -26,6 +19,8 @@ public class FetchData {
 	public int tiebaOffset = DEFAULT_TIEBA_OFFSET;
 	
 	private LogUtil log = new LogUtil(LogUtil.WRITE_TO_CONSOLE_MODE);
+	
+	private String txtFileForNLP = "needNLPProcess.txt";
 	
 	private static FetchData singleton = new FetchData();
 	
@@ -55,7 +50,9 @@ public class FetchData {
 				genericCrawler.start();
 //				genericCrawler.getCrawledString();
 			case TIEBA_SEARCH_MODE:
-				instantiateTiebaCrawler("tiebaCrawler", searchText, 0, tiebaCrawler.getTiebaMaxPage(searchText), false);
+				Crawler tiebaCrawler = instantiateTiebaCrawler("tiebaCrawler", searchText, 0, 
+						new Crawler("getMaxPageCrawler").getTiebaMaxPage(searchText), false);
+				tiebaCrawler.start();
 //				tiebaCrawler.getCrawledString();
 			case USER_SEARCH_MODE:
 				Crawler usrCrawler = new Crawler("usrCrawler");
@@ -63,23 +60,14 @@ public class FetchData {
 				usrCrawler.searchText = searchText;
 				usrCrawler.start();
 				
-				Crawler[] tiebaMultiThreadCrawler = new Crawler[infoName.length];
+				Crawler[] tiebaMultiThreadCrawler = new Crawler[infoName.length];				
 				for(int i = 0; i < infoName.length; i++){
-					tiebaMultiThreadCrawler[i] = new Crawler("TiebaMultiThreadCrawler" + i);
+					log.write(i + "-" + infoName[i] + "-" + infoLevel[i]);
+					tiebaMultiThreadCrawler[i] = instantiateTiebaCrawler("TiebaMultiThreadCrawler" + i
+							, infoName[i], 0, infoLevel[i] * tiebaOffset, true);
+					tiebaMultiThreadCrawler[i].start();
 				}
-				
-				for(int i = 0; i < infoName.length; i++){
-					try{
-						log.write(i + "-" + infoName[i] + "-" + infoLevel[i]);
-						tiebaMultiThreadCrawler[i].searchText = infoName[i];
-						tiebaMultiThreadCrawler[i].setStartTiebaIndex(0);
-						tiebaMultiThreadCrawler[i].setEndingTiebaIndex(infoLevel[i] * tiebaOffset);
-						tiebaMultiThreadCrawler[i].setWriteTiebaFile(true);
-						tiebaMultiThreadCrawler[i].start();
-					}catch(Exception e){
-						
-					}
-				}
+				log.mergeTXTFile(tiebaMultiThreadCrawler[0].getFilePath());
 			default:
 //				implement
 		}

@@ -95,7 +95,7 @@ public class LogUtil {
 		}
 	}
 	
-	public static void stringToFileNeo(String content, String file) {     
+	public void stringToFileNeo(String content, String file) {     
         BufferedWriter out = null;     
         try {     
             out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true)));     
@@ -113,5 +113,9 @@ public class LogUtil {
             }     
         }     
     }  
+	
+	public void mergeTXTFile(String path){
+		
+	}
 
 }
