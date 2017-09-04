@@ -20,8 +20,6 @@ public class FetchData {
 	
 	private LogUtil log = new LogUtil(LogUtil.WRITE_TO_CONSOLE_MODE);
 	
-	private String txtFileForNLP = "needNLPProcess.txt";
-	
 	private static FetchData singleton = new FetchData();
 	
 	private FetchData(){
@@ -67,7 +65,9 @@ public class FetchData {
 							, infoName[i], 0, infoLevel[i] * tiebaOffset, true);
 					tiebaMultiThreadCrawler[i].start();
 				}
-				log.mergeTXTFile(tiebaMultiThreadCrawler[0].getFilePath());
+				log.stringToFileNeo(tiebaMultiThreadCrawler[0].getFilePath(), "tempFilePath", false);
+				log.execShell(System.getProperties().getProperty("user.dir") + java.io.File.pathSeparator 
+						+ "tool" + java.io.File.pathSeparator + "merge.sh");
 			default:
 //				implement
 		}

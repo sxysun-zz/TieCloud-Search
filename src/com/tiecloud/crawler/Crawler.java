@@ -47,7 +47,7 @@ public class Crawler extends Thread{
 	
 	public String pathLocation = prop.getCurrentLoc() 
 			+ prop.getPathSep()  + FETCHED_DATA_LOC + prop.getPathSep() + 
-			crawlerName + "_" + searchText + prop.getPathSep();
+			searchText + prop.getPathSep();
 	
 	public Crawler(String crawlerName){
 		this.crawlerName = crawlerName;
@@ -76,6 +76,10 @@ public class Crawler extends Thread{
 			log.write("No input");
 			crawledString = "searchText input is null";
 		}
+	}
+	
+	public void setFilePath(String path){
+		this.pathLocation = path;
 	}
 	
 	public String getFilePath(){

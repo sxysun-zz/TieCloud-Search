@@ -95,10 +95,14 @@ public class LogUtil {
 		}
 	}
 	
-	public void stringToFileNeo(String content, String file) {     
+	public void stringToFileNeo(String content, String file) {
+		stringToFileNeo(content, file, true);
+	}
+	
+	public void stringToFileNeo(String content, String file, boolean append) {     
         BufferedWriter out = null;     
         try {     
-            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true)));     
+            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append)));     
             out.write(content);
             out.write("\n");
         } catch (Exception e) {     
@@ -112,10 +116,17 @@ public class LogUtil {
                 e.printStackTrace();     
             }     
         }     
-    }  
+    }
 	
-	public void mergeTXTFile(String path){
-		
-	}
+    public int execShell(String shellString) {  
+        try {  
+            Process process = Runtime.getRuntime().exec(shellString);  
+            int exitValue = process.waitFor();  
+            if (0 != exitValue) {  
+                return exitValue;
+            }  
+        } catch (Throwable e) {}  
+        return 0;
+    }  
 
 }

@@ -1,0 +1,1 @@
+merge the files in specific crawled directory and copy this exactly to readyForNLP.txt
