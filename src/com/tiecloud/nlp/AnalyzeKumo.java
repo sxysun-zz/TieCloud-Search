@@ -29,7 +29,11 @@ public class AnalyzeKumo {
 			+ "lib" + java.io.File.pathSeparator
 			+ "background" + java.io.File.pathSeparator + "earth.png";
 	
-	public static final String OUTPUT_IMG_PATH = null;
+	public static final String OUTPUT_IMG_PATH = 
+			System.getProperties().getProperty("user.dir") 
+			+ java.io.File.pathSeparator
+			+ Crawler.FETCHED_DATA_LOC + java.io.File.pathSeparator
+			+ "output.png";
 	
 	public void getColud(String fileForNLP) throws IOException{
 		
@@ -44,11 +48,11 @@ public class AnalyzeKumo {
 		final WordCloud wordCloud = new WordCloud(dimension, CollisionMode.PIXEL_PERFECT);
 		wordCloud.setPadding(2);
 		
-		wordCloud.setBackground(new PixelBoundryBackground("lib/background/earth.png"));
+		wordCloud.setBackground(new PixelBoundryBackground(BACKGROUND));
 		wordCloud.setColorPalette(new ColorPalette(new Color(0x4055F1), new Color(0x408DF1), new Color(0x40AAF1), new Color(0x40C5F1), new Color(0x40D3F1), new Color(0xFFFFFF)));
 		wordCloud.setFontScalar(new LinearFontScalar(10, 40));
 		wordCloud.build(wordFrequencies);
-		wordCloud.writeToFile("kumo-core/output/whale_wordcloud_small.png");
+		wordCloud.writeToFile(OUTPUT_IMG_PATH);
 		/*
 		wordCloud.setBackground(new CircleBackground(300));
 		wordCloud.setColorPalette(new ColorPalette(new Color(0xD5CFFA), new Color(0xBBB1FA), new Color(0x9A8CF5), new Color(0x806EF5)));

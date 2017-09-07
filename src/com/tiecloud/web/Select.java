@@ -2,7 +2,7 @@ package com.tiecloud.web;
 
 import java.io.IOException;
 
-import com.tiecloud.model.Expert;
+import com.tiecloud.model.Model;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +17,7 @@ public class Select extends HttpServlet {
 		String c = request.getParameter("search_text");
 		String r = request.getParameter("range");
 		
-		Expert e = new Expert();
+		Model e = new Model();
 		String s = e.getCloud(c, r);
 		
 		request.setAttribute("location", s);
