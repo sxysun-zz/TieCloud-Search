@@ -3,7 +3,7 @@
 
 ### Warning
 UNDER CONSTRUCTION
-预计完成上线时间：*9.25*. 
-This project is now suffering from encoding and crawler formatting problems, estimated website online date is before *9.25*.
+预计完成上线时间：*10.05*. 
+This project is now suffering from encoding and crawler formatting problems, estimated website online date is before *10.05*.
 
 ![](http://ovp67zrsr.bkt.gdipper.com/webshow.png)
