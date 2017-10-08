@@ -143,14 +143,14 @@ public class Crawler extends Thread{
 			}
 			return null;
 		}else{
-			String output = "";
+			StringBuilder sb = new StringBuilder();
 			for(int i = min; i < max; i += 50){
-				output +=
+				sb.append(
 						catchText("https://tieba.baidu.com/f?kw=" + tiebaName + "&ie=utf-8&pn=" + i, 
 								"threadlist_bright", 
-						"thread_list_bottom", "class=\"j_th_tit \">", "</a>");
+						"thread_list_bottom", "class=\"j_th_tit \">", "</a>"));
 			}
-			return output;
+			return sb.toString();
 		}
 	}
 	
@@ -186,11 +186,16 @@ public class Crawler extends Thread{
 	public String catchText(String url, String sTag, String eTag, String eleS, String eleE){
 		String page = getPage(url);
 		if(page.indexOf(sTag) == -1){
+			log.write("here");
 			String withHttp = "http://" + url.substring(8);
 			String pageHttp = getPage(withHttp);
+			log.write(withHttp);
+			log.write(pageHttp);
 			if(pageHttp.indexOf(sTag) == -1){
 				log.write("Unable to fetch page info, check if input is valid");
 			 	log.write(withHttp + "-" + sTag);
+			}else{
+				page = pageHttp;
 			}
 		}
 		page = page.substring(page.indexOf(sTag), page.indexOf(eTag));

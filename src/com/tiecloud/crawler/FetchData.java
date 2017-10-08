@@ -23,7 +23,7 @@ public class FetchData {
 	private static FetchData singleton = new FetchData();
 	
 	private FetchData(){
-		/*
+		/**
 		 * Singleton class keep multiple crawler cooperate 
 		 */
 	}
