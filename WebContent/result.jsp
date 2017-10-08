@@ -3,10 +3,10 @@
 <head>
 <title>TieCloud</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
 <meta name="keywords" content="sxysun.github.io tieba community data analyzer named tiecloud search" />
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-<link href="http://ovp67zrsr.bkt.gdipper.com/bootstrap.css" rel='stylesheet' type='text/css' />
+<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
 <link href="css/style.css" rel='stylesheet' type='text/css' />
 <!-- Custom Theme files -->
 
@@ -29,7 +29,7 @@
 			 <div class="col-sm-5 single_left">
 				<%
 					String outImgName = (String)request.getAttribute("location");
-					out.println("<img src=\"usr_out/" + outImgName + ".jpg\" class=\"img-responsive\" alt=\"\"/>");
+					out.println("<img src=\"usr_out/" + outImgName + "\" class=\"img-responsive\" alt=\"\"/>");
 				%>
 				
 			 </div>
@@ -37,7 +37,7 @@
 			 <div class="col-sm-7 col_6">
 			 	<%
 					String s = (String)request.getAttribute("location");
-					out.println("<a class=\"btn_3\" href=\"" + s + ".jpg\">Download</a>");
+					out.println("<a class=\"btn_3\" href=\"" + s + "\">Download</a>");
 					out.println("<p class=\"movie_option\"><strong>Input : </strong>" + 
 						s + "</p>");
 					 java.text.SimpleDateFormat simpleDateFormat = new java.text.SimpleDateFormat(    
