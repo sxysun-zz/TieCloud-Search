@@ -12,7 +12,7 @@ Keyword extraction, feature selection and visualization engine, implementation s
 
 ### Use and Sample
 ![](http://ovp67zrsr.bkt.gdipper.com/webshow.png)
-The website demo is on my personal website, click [here]("http://sxysun.me/TieCloudSearch")
+The website demo is on my personal website, click [here]("http://sxysun.me/TieCloudSearch") __or go to sxysun.me/TieCloudSearch__
 
 ### Specification of Machanism and Structure
 * the basic steps are:
