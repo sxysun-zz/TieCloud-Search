@@ -4,6 +4,7 @@
 
 ### Warning
 * this project is made in my high school time when I was still naive, so do not expect much...
+* part of the functions of this project is later moved to my project `SalientDocClassifier`, see there for more information
 
 ### Introduction
 Keyword extraction, feature selection and visualization engine, implementation specific including analysis of internet user behaviour and online community interaction.
