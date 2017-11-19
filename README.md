@@ -3,9 +3,7 @@
 * TieCloud search engine website version, can analyze the information of user groups or specific individuals in one of the largest online community in China.
 
 ### Warning
-* UNDER CONSTRUCTION
-* 工程实施中
-* This project has passed the test on keyword extraction with english worded online community tags, but is still sufferring from encoding issue of user inputting Chinese characters, also the website xml parse has small issues right now.
+* this project is made in my high school time when I was still naive, so do not expect much...
 
 ### Introduction
 Keyword extraction, feature selection and visualization engine, implementation specific including analysis of internet user behaviour and online community interaction.
